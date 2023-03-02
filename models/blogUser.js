@@ -16,7 +16,7 @@ const blogUser = new Schema({
     email: {
         type: String,
         required: [true, 'Please provide a valid email'],
-        unique: [true, 'This email is already in use'],
+        unique: true,
         validate: [isEmail, 'Please enter a valid email']
     },
     password: {
@@ -26,7 +26,7 @@ const blogUser = new Schema({
     },
     gender: {
         type: String,
-        enum: ['male', 'female'],
+        enum: ['male', 'female', 'others'],
         default: 'male'
     }
 }, {timestamps: true});

@@ -4,9 +4,6 @@ const errorHandler = require('../middleware/errorHandler');
 
 const signup = async (req, res) => {
     const {firstName, lastName, email, password, gender } = req.body;
-    if (!firstName||!lastName||!email||!password||!gender) {
-        res.status(400).json({sucess:false, message:'Please provide neccessary information'});
-    }
     try {
         const blogger = await blogUser.create({...req.body})
         const token = blogger.generateToken();
@@ -34,8 +31,8 @@ const login = async (req, res) => {
         const token = blogger.generateToken();
         res.status(200).json({data: {firtsName: blogger.firstName, lastName: blogger.lastName, email: blogger.email, gender: blogger.gender}, token})
     } catch (error) {
-        console.log(error);
-        res.json(error)
+        const errors = errorHandler(error)
+        res.status(400).json({errors})  
         
     }
     

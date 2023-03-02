@@ -1,9 +1,10 @@
 const blogStories = require('../models/blogStories')
+const errors = require('../middleware/another')
 const cloudinary = require('cloudinary').v2
 const fs = require('fs')
 
 const createStory = async (req, res) => {
-    const {tag, title, paragraph, image} = req.body
+    const {tag, title, paragraph} = req.body
     req.body.createdby = req.user.userId
    
     if (!tag || !title || !paragraph){
@@ -17,14 +18,14 @@ const createStory = async (req, res) => {
     res.status(201).json({success: true, story})
     
    } catch (error) {
-    console.log(error); 
-    res.json({error})
+    const errors = errors(error)
+    res.json({errors})
    }
 }
 
 const getStories = async (req, res) => {
     try {
-        const stories =await blogStories.find({createdBy: req.user.userId});
+        const stories =await blogStories.find({createdby: req.user.userId});
         res.status(200).json({noOfJobs: stories.length, stories});
        } catch (error) {
         console.log(error);
@@ -35,7 +36,7 @@ const getStories = async (req, res) => {
 const getStory = async (req, res) => {
     const {StoryId} = req.params
     try {
-        const story =await blogStories.findOne({createdBy: req.user.userId , _Id: StoryId});
+        const story =await blogStories.findOne({ _id: StoryId, createdby: req.user.userId });
         if (!story){
             return res.status(404).json({success: false, message: 'Story not found'})
         }
@@ -50,7 +51,7 @@ const updateStory = async (req, res) => {
     const { StoryId} = req.params
     const {tag, title, paragraph, image} = req.body
     try {
-        const story =await blogStories.findOneAndUpdate({createdBy: req.user.userId , _Id: StoryId},  req.body, {new:true, runValidators: true,});
+        const story =await blogStories.findOneAndUpdate({createdby: req.user.userId , _id: StoryId},  req.body, {new:true, runValidators: true,});
         
         res.status(200).json({story});
     } catch (error) {
@@ -62,7 +63,7 @@ const updateStory = async (req, res) => {
 const deleteStory = async (req, res) => {
     const {StoryId} = req.params
     try {
-        const story =await blogStories.findOneAndDelete({createdBy: req.user.userId , _Id: StoryId});
+        const story =await blogStories.findOneAndDelete({createdby: req.user.userId , _id: StoryId});
         if(!story){
             res.status(404).json({message: 'Story not found'})
         }

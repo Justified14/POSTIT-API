@@ -4,7 +4,6 @@ const app = express();
 const PORT = process.env.PORT || 6000
 const mongoose = require('mongoose');
 const cors = require('cors');
-const cookieParser = require('cookie-parser');
 const fileUpload = require('express-fileupload');
 const cloudinary = require('cloudinary').v2;
 const blogRoutes = require('./routes/blogRoute')
@@ -28,15 +27,9 @@ app.use(express.urlencoded({ extended: true }));
 
 
 
-app.use('/',blogRoutes)
-app.use(allRoutes)
+app.use('/', blogRoutes)
+app.use(auth, allRoutes)
 app.use('/api/v1/story', auth, userRoutes);
-
-
-
-
-
-
 
 app.use(notFound)
 
