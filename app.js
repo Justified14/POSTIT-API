@@ -1,7 +1,7 @@
 require('dotenv').config();
 const express = require('express');
 const app = express();
-const PORT = process.env.PORT || 6000
+const PORT = process.env.PORT || 2000
 const mongoose = require('mongoose');
 const cors = require('cors');
 const fileUpload = require('express-fileupload');
@@ -27,9 +27,12 @@ app.use(express.urlencoded({ extended: true }));
 
 
 
-app.use('/', blogRoutes)
+app.use(blogRoutes)
 app.use(auth, allRoutes)
 app.use('/api/v1/story', auth, userRoutes);
+app.get('/api/v1/user', auth, (req, res)=>{
+    res.status(200).json({success: true, name:req.user.name})
+})
 
 app.use(notFound)
 

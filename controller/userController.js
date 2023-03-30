@@ -18,15 +18,15 @@ const createStory = async (req, res) => {
     res.status(201).json({success: true, story})
     
    } catch (error) {
-    const errors = errors(error)
-    res.json({errors})
+    console.log(error);
+    res.json({error})
    }
 }
 
 const getStories = async (req, res) => {
     try {
         const stories =await blogStories.find({createdby: req.user.userId});
-        res.status(200).json({noOfJobs: stories.length, stories});
+        res.status(200).json({noOfStories: stories.length, stories});
        } catch (error) {
         console.log(error);
         res.json({error})

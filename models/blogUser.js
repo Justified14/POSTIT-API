@@ -39,7 +39,7 @@ blogUser.pre('save', async function(next) {
 });
 
 blogUser.methods.generateToken = function (){
-    return jwt.sign ({userId: this._id, name: this.name}, process.env.JWT_SECRET, { expiresIn: '3d'})
+    return jwt.sign ({userId: this._id, name: this.firstName}, process.env.JWT_SECRET, { expiresIn: '3d'})
 };
 
 blogUser.methods.comparePassword = async function(userPassword){
